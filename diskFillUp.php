@@ -11,16 +11,19 @@ $_CONFIG[ 'threshold' ] = 1 * 1024 * 1024 * 1024 ; // How much free space to lea
 
 /////////
 
-$frame = 0 ;
-
 $dirslen = $_CONFIG[ 'dirwidth' ] * $_CONFIG[ 'dirdepth' ] ;
 
-$diskfreespace = disk_free_space( '/' ) ;
+$mindiskfreespace = $_CONFIG[ 'threshold' ] + $_CONFIG[ 'filesize' ] ;
 
+$frame = 0 ;
 
-while( $diskfreespace > ( $_CONFIG[ 'threshold' ] + $_CONFIG[ 'filesize' ] ) ) {
+while( true ) {
 
-	( ( ( $frame++ ) % 10 ) == 0 ) ? print( "\n[ $diskfreespace ] ." ) : print( "." ) ; 
+	$diskfreespace = disk_free_space( '/' ) ;
+
+	if( $diskfreespace <= $mindiskfreespace ) break ;
+
+	( ( ( $frame++ ) % 10 ) == 0 ) ? print( "\n[ $diskfreespace ] ." ) : print( '.' ) ; 
 
 	$rndString = hash( 'sha256' , uniqid( 'VkU0WaS38G0fiqIhcsAW' , true ).bin2hex( openssl_random_pseudo_bytes( 256 ) ) ) ;
 
@@ -29,7 +32,5 @@ while( $diskfreespace > ( $_CONFIG[ 'threshold' ] + $_CONFIG[ 'filesize' ] ) ) {
 	if( !is_dir( $dir ) ) mkdir( $dir , 0777 , true ) ;
 
 	file_put_contents( $dir.'/'.substr( $rndString , $dirslen ).'.tmp' , openssl_random_pseudo_bytes( $_CONFIG[ 'filesize' ] ) ) ;
-
-	$diskfreespace = disk_free_space( '/' ) ;
 
 }	
