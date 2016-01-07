@@ -17,7 +17,8 @@ $dirslen = $_CONFIG[ 'dirwidth' ] * $_CONFIG[ 'dirdepth' ] ;
 
 $diskfreespace = disk_free_space( '/' ) ;
 
-while( $diskfreespace > $_CONFIG[ 'threshold' ] ) {
+
+while( $diskfreespace > ( $_CONFIG[ 'threshold' ] + $_CONFIG[ 'filesize' ] ) ) {
 
 	( ( ( $frame++ ) % 10 ) == 0 ) ? print( "\n[ $diskfreespace ] ." ) : print( "." ) ; 
 
