@@ -1,25 +1,34 @@
 <?php
 
+// TODO
+// Pick random '_cache_' directory
+// Progress show % done
+// Progress ETA
+// fallocate -l 100G file2
+
+
 // Disk Fill Up
 // Fills local disk with files until some threshold
 
 $_CONFIG = array( ) ;
-$_CONFIG[ 'dirwidth' ] = 3 ; // width of subdirectories (aaa...)
-$_CONFIG[ 'dirdepth' ] = 3 ; // total number fo sub durectories (x/y/z....)
-$_CONFIG[ 'filesize' ] = 1 * 1024 * 1024 * 50 ; // Size of generated files (50MB)
-$_CONFIG[ 'threshold' ] = 1 * 1024 * 1024 * 1024 ; // How much free space to leave (1GB)
+//$_CONFIG[ "disk" ] = "/" ; // used to determine disk free space
+$_CONFIG[ "disk" ] = "/media/user/DATA" ; // used to determine disk free space
+$_CONFIG[ "dirwidth" ] = 3 ; // width of subdirectories (aaa...)
+$_CONFIG[ "dirdepth" ] = 3 ; // total number fo sub durectories (x/y/z....)
+$_CONFIG[ "filesize" ] = 1 * 1024 * 1024 * 100 ; // Size of generated files (50MB)
+$_CONFIG[ "threshold" ] = 1 * 1024 * 1024 * 1024 ; // How much free space to leave (1GB)
 
 /////////
 
-$dirslen = $_CONFIG[ 'dirwidth' ] * $_CONFIG[ 'dirdepth' ] ;
+$dirslen = $_CONFIG[ "dirwidth" ] * $_CONFIG[ "dirdepth" ] ;
 
-$mindiskfreespace = $_CONFIG[ 'threshold' ] + $_CONFIG[ 'filesize' ] ;
+$mindiskfreespace = $_CONFIG[ "threshold" ] + $_CONFIG[ "filesize" ] ;
 
 $frame = 0 ;
 
 while( true ) {
 
-	$diskfreespace = disk_free_space( '/' ) ;
+	$diskfreespace = disk_free_space( $_CONFIG[ "disk" ] ) ;
 
 	if( $diskfreespace <= $mindiskfreespace ) break ;
 
